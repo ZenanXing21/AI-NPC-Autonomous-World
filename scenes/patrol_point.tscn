@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 0.25
+height = 0.5
+
+[node name="PatrolPoint" type="Marker3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_1")
+visible = true
