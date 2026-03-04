@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://c8a5067wldmr5"]
 
-[ext_resource type="Script" path="res://scripts/npc_state_machine.gd" id="1_gt07c"]
-[ext_resource type="Script" path="res://scripts/npc_perception.gd" id="2_sense"]
-[ext_resource type="Script" path="res://scripts/npc_dialogue.gd" id="3_dialogue"]
-[ext_resource type="Script" path="res://scripts/world_manager.gd" id="4_world"]
+[ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://scripts/npc_patrol.gd" id="1_gt07c"]
+[ext_resource type="Script" path="res://scripts/npc_state_machine.gd" id="2_fsm"]
+[ext_resource type="Script" path="res://scripts/npc_perception.gd" id="3_sense"]
+[ext_resource type="Script" path="res://scripts/npc_dialogue.gd" id="4_dialogue"]
+[ext_resource type="Script" path="res://scripts/world_manager.gd" id="5_world"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -28,7 +29,7 @@ navigation_mesh = SubResource("NavigationMesh_vaf5k")
 mesh = SubResource("PlaneMesh_gt07c")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1797099388]
-script = ExtResource("1_gt07c")
+script = ExtResource("2_fsm")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1687184594]
 mesh = SubResource("CapsuleMesh_f2a5t")
@@ -43,11 +44,11 @@ max_speed = 3.0
 
 
 [node name="NPCDialogue" type="Node" parent="CharacterBody3D"]
-script = ExtResource("3_dialogue")
+script = ExtResource("4_dialogue")
 interaction_range = 3.5
 
 [node name="PerceptionArea" type="Area3D" parent="CharacterBody3D"]
-script = ExtResource("2_sense")
+script = ExtResource("3_sense")
 monitoring = true
 monitorable = true
 
@@ -71,7 +72,7 @@ current = true
 
 
 [node name="WorldManager" type="Node" parent="."]
-script = ExtResource("4_world")
+script = ExtResource("5_world")
 npc_template_path = NodePath("../CharacterBody3D")
 player_path = NodePath("../Player")
 spawn_npc_count = 2
