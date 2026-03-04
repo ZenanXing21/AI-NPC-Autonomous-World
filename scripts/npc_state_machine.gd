@@ -13,6 +13,7 @@ extends CharacterBody3D
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var perception_area: Area3D = $PerceptionArea
+@onready var dialogue_memory: Node = $NPCDialogue
 
 var current_state: State
 var states: Dictionary = {}
@@ -142,6 +143,9 @@ func can_sense_player() -> bool:
 		return false
 	return global_position.distance_to(player.global_position) <= sense_distance
 
+func get_target_node() -> Node3D:
+	return blackboard.get("current_target") as Node3D
+
 func get_target_position() -> Vector3:
 	var target := blackboard.get("current_target") as Node3D
 	if target != null:
@@ -193,6 +197,10 @@ func move_along_path(_delta: float) -> void:
 
 func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
+	if dialogue_memory != null and dialogue_memory.has_method("recall"):
+		var remembered_name := str(dialogue_memory.call("recall", "player_name"))
+		if remembered_name != "" and remembered_name == target.name:
+			print("[FSM] Recognized familiar player: ", remembered_name)
 	if current_state == states.get("PatrolState"):
 		investigate_target = target.global_position
 		change_state("InvestigateState")
