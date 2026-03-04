@@ -21,11 +21,6 @@ func _ready() -> void:
 	_player = get_node_or_null(player_path) as Node3D
 	if _player == null:
 		push_warning("[WorldManager] Player not found at path: %s" % player_path)
-codex/plan-ai-system-modules-and-files-sdicvm
-	if _player == null:
-		push_warning("[WorldManager] Player not found at path: %s" % player_path)
-
-main
 	_register_existing_npc()
 	_spawn_npcs()
 	_init_relationships()
