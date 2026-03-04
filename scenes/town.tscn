@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://scripts/npc_status_panel.gd" id="8_ui"]
 [ext_resource type="Script" path="res://scripts/debug_tools.gd" id="9_debug"]
 [ext_resource type="Script" path="res://scripts/ai_llm.gd" id="10_llm"]
+[ext_resource type="Script" path="res://scripts/npc_bt_controller.gd" id="11_bt_ctrl"]
+[ext_resource type="Resource" path="res://assets/ai/npc_behavior_tree.tres" id="12_bt_tree"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -64,6 +66,22 @@ monitorable = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/PerceptionArea"]
 shape = SubResource("SphereShape3D_perception")
 
+
+[node name="CharacterBody3D_BT" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2)
+script = ExtResource("11_bt_ctrl")
+behavior_tree = ExtResource("12_bt_tree")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D_BT"]
+mesh = SubResource("CapsuleMesh_f2a5t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D_BT"]
+shape = SubResource("CapsuleShape3D_ms2es")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="CharacterBody3D_BT"]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+max_speed = 3.0
 
 [node name="Player" type="CharacterBody3D" parent="." groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
