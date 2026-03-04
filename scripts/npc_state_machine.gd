@@ -239,6 +239,24 @@ func _get_actor_name(actor: Node3D) -> String:
 		return str(actor.get_meta("player_name"))
 	return actor.name
 
+
+func get_memory_status() -> String:
+	if dialogue_memory != null and dialogue_memory.has_method("get_memory_status_text"):
+		return str(dialogue_memory.call("get_memory_status_text"))
+	return "memory unavailable"
+
+func trigger_dialogue() -> void:
+	if dialogue_memory == null or not dialogue_memory.has_method("trigger_dialogue"):
+		push_warning("[FSM] Dialogue node missing trigger_dialogue()")
+		return
+	var speaker := "Traveler"
+	var target := get_target_node()
+	if target != null:
+		speaker = _get_actor_name(target)
+	elif player != null:
+		speaker = _get_actor_name(player)
+	dialogue_memory.call("trigger_dialogue", speaker)
+
 func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
 	if dialogue_memory != null and dialogue_memory.has_method("recall"):

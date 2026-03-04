@@ -38,6 +38,20 @@ func recall(key: String) -> Variant:
 func forget(key: String) -> void:
 	memory.erase(key)
 
+func trigger_dialogue(player_name: String = "Traveler", topic: String = "") -> void:
+	var final_topic := topic
+	if final_topic == "":
+		final_topic = _pick_topic_for_next_line()
+	emit_signal("player_interacted", player_name, final_topic)
+
+func get_memory_status_text() -> String:
+	var known_name := str(memory.get("player_name", ""))
+	if known_name == "":
+		known_name = "Unknown"
+	var topics: Array = memory.get("topics", [])
+	var count := int(memory.get("interaction_count", 0))
+	return "name=%s | interactions=%d | topics=%s" % [known_name, count, str(topics)]
+
 func _on_player_interacted(player_name: String, topic: String) -> void:
 	remember("player_name", player_name)
 

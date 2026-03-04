@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/world_manager.gd" id="5_world"]
 [ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="6_npc_template"]
 [ext_resource type="PackedScene" path="res://scenes/patrol_point.tscn" id="7_patrol_point"]
+[ext_resource type="Script" path="res://scripts/npc_status_panel.gd" id="8_ui"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -86,6 +87,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3)
 
 [node name="PatrolPointB" parent="." instance=ExtResource("7_patrol_point")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
+
+
+[node name="NPCStatusUI" type="CanvasLayer" parent="."]
+script = ExtResource("8_ui")
+target_npc_path = NodePath("../CharacterBody3D")
+
+[node name="PanelContainer" type="PanelContainer" parent="NPCStatusUI"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 480.0
+offset_bottom = 182.0
+
+[node name="MarginContainer" type="MarginContainer" parent="NPCStatusUI/PanelContainer"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NPCStatusUI/PanelContainer/MarginContainer"]
+
+[node name="Title" type="Label" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "NPC Monitor"
+
+[node name="NPCNameValue" type="Label" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "Name: N/A"
+
+[node name="StateValue" type="Label" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "State: N/A"
+
+[node name="MemoryValue" type="Label" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "Memory: N/A"
+
+[node name="TriggerDialogueButton" type="Button" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "Trigger Dialogue"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2058797888]
 transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 0, 0, 0)
