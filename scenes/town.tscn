@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="6_npc_template"]
 [ext_resource type="PackedScene" path="res://scenes/patrol_point.tscn" id="7_patrol_point"]
 [ext_resource type="Script" path="res://scripts/npc_status_panel.gd" id="8_ui"]
+[ext_resource type="Script" path="res://scripts/debug_tools.gd" id="9_debug"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -88,6 +89,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3)
 [node name="PatrolPointB" parent="." instance=ExtResource("7_patrol_point")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
 
+
+
+[node name="DebugTools" type="Node3D" parent="."]
+script = ExtResource("9_debug")
+target_root_path = NodePath(".")
 
 [node name="NPCStatusUI" type="CanvasLayer" parent="."]
 script = ExtResource("8_ui")
