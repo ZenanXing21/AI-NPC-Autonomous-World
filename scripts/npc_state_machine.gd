@@ -23,28 +23,28 @@ var player: Node3D
 
 class State:
 	extends RefCounted
-	func enter(npc: CharacterBody3D) -> void:
+	func enter(npc) -> void:
 		pass
-	func physics_update(npc: CharacterBody3D, delta: float) -> void:
+	func physics_update(npc, delta: float) -> void:
 		pass
-	func exit(npc: CharacterBody3D) -> void:
+	func exit(npc) -> void:
 		pass
 
 class IdleState:
 	extends State
-	func enter(npc: CharacterBody3D) -> void:
+	func enter(npc) -> void:
 		npc.velocity = Vector3.ZERO
 		npc.move_and_slide()
 		print("[FSM] Enter IdleState")
-	func physics_update(npc: CharacterBody3D, _delta: float) -> void:
+	func physics_update(npc, _delta: float) -> void:
 		npc.change_state("PatrolState")
 
 class PatrolState:
 	extends State
-	func enter(npc: CharacterBody3D) -> void:
+	func enter(npc) -> void:
 		npc.pick_new_patrol_target()
 		print("[FSM] Enter PatrolState")
-	func physics_update(npc: CharacterBody3D, delta: float) -> void:
+	func physics_update(npc, delta: float) -> void:
 		if npc.can_sense_player():
 			npc.investigate_target = npc.player.global_position
 			npc.change_state("InvestigateState")
@@ -58,10 +58,10 @@ class PatrolState:
 
 class InvestigateState:
 	extends State
-	func enter(npc: CharacterBody3D) -> void:
+	func enter(npc) -> void:
 		npc.set_navigation_target(npc.investigate_target)
 		print("[FSM] Enter InvestigateState. Heading to: ", npc.investigate_target)
-	func physics_update(npc: CharacterBody3D, delta: float) -> void:
+	func physics_update(npc, delta: float) -> void:
 		if npc.can_sense_player():
 			npc.change_state("ChaseState")
 			return
@@ -72,10 +72,10 @@ class InvestigateState:
 
 class ChaseState:
 	extends State
-	func enter(npc: CharacterBody3D) -> void:
+	func enter(npc) -> void:
 		npc.lost_player_timer = 0.0
 		print("[FSM] Enter ChaseState")
-	func physics_update(npc: CharacterBody3D, delta: float) -> void:
+	func physics_update(npc, delta: float) -> void:
 		if npc.can_sense_player():
 			npc.lost_player_timer = 0.0
 			npc.set_navigation_target(npc.player.global_position)
