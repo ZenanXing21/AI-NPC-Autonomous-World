@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://c8a5067wldmr5"]
 
 [ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://scripts/npc_patrol.gd" id="1_gt07c"]
+codex/plan-ai-system-modules-and-files-xn1t4p
 [ext_resource type="Script" path="res://scripts/npc_state_machine.gd" id="2_fsm"]
 [ext_resource type="Script" path="res://scripts/npc_perception.gd" id="3_sense"]
 [ext_resource type="Script" path="res://scripts/npc_dialogue.gd" id="4_dialogue"]
 [ext_resource type="Script" path="res://scripts/world_manager.gd" id="5_world"]
+
+main
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
