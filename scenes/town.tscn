@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c8a5067wldmr5"]
+
+[ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://npc_controller.gd" id="1_gt07c"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
+vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gt07c"]
+size = Vector2(20, 20)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f2a5t"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ms2es"]
+
+[node name="Game" type="Node3D" unique_id=1881319710]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=721475733]
+navigation_mesh = SubResource("NavigationMesh_vaf5k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D" unique_id=715602375]
+mesh = SubResource("PlaneMesh_gt07c")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1797099388]
+script = ExtResource("1_gt07c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1687184594]
+mesh = SubResource("CapsuleMesh_f2a5t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=16903835]
+shape = SubResource("CapsuleShape3D_ms2es")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="CharacterBody3D" unique_id=288395548]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+max_speed = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=177350410]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2058797888]
+transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 0, 0, 0)
