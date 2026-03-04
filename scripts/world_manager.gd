@@ -4,6 +4,7 @@ extends Node
 @export var player_path: NodePath = NodePath("../Player")
 @export var spawn_npc_count: int = 2
 @export var spawn_spacing: float = 2.5
+@export var npc_scene_template: PackedScene
 @export var decision_log_interval: float = 3.0
 @export var day_night_cycle_seconds: float = 20.0
 
@@ -18,6 +19,8 @@ var _player: Node3D
 func _ready() -> void:
 	randomize()
 	_player = get_node_or_null(player_path) as Node3D
+	if _player == null:
+		push_warning("[WorldManager] Player not found at path: %s" % player_path)
 codex/plan-ai-system-modules-and-files-sdicvm
 	if _player == null:
 		push_warning("[WorldManager] Player not found at path: %s" % player_path)
@@ -56,11 +59,29 @@ func _spawn_npcs() -> void:
 		return
 
 	for i in spawn_npc_count:
-		var clone := template.duplicate() as CharacterBody3D
+		var spawn_position := template.global_position + Vector3((i + 1) * spawn_spacing, 0.0, 0.0)
+		var clone := spawn_npc_from_template(spawn_position)
+		if clone == null:
+			clone = template.duplicate() as CharacterBody3D
+			clone.global_position = spawn_position
+			template.get_parent().add_child(clone)
 		clone.name = "NPC_%d" % (i + 1)
-		clone.global_position = template.global_position + Vector3((i + 1) * spawn_spacing, 0.0, 0.0)
-		template.get_parent().add_child(clone)
 		_register_npc(clone)
+
+
+func spawn_npc_from_template(spawn_position: Vector3, parent: Node = null) -> CharacterBody3D:
+	if npc_scene_template == null:
+		return null
+	var instance := npc_scene_template.instantiate() as CharacterBody3D
+	if instance == null:
+		push_warning("[WorldManager] NPC template scene did not instantiate a CharacterBody3D")
+		return null
+	instance.global_position = spawn_position
+	var target_parent := parent
+	if target_parent == null:
+		target_parent = get_parent()
+	target_parent.add_child(instance)
+	return instance
 
 func _register_npc(npc: CharacterBody3D) -> void:
 	if npc == null or npcs.has(npc):
@@ -72,18 +93,12 @@ func _register_npc(npc: CharacterBody3D) -> void:
 	_apply_time_of_day_to_npc(npc)
 
 func _update_ai_state_cache() -> void:
-codex/plan-ai-system-modules-and-files-sdicvm
 	var alive_npcs: Array[CharacterBody3D] = []
 	for npc in npcs:
 		if is_instance_valid(npc):
 			alive_npcs.append(npc)
 			npc_ai_states[npc.name] = _safe_get_ai_state(npc)
 	npcs = alive_npcs
-
-	for npc in npcs:
-		if is_instance_valid(npc):
-			npc_ai_states[npc.name] = _safe_get_ai_state(npc)
-main
 
 func _log_npc_decisions() -> void:
 	for npc in npcs:

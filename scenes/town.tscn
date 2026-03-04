@@ -8,6 +8,8 @@ main
 [ext_resource type="Script" path="res://scripts/npc_perception.gd" id="3_sense"]
 [ext_resource type="Script" path="res://scripts/npc_dialogue.gd" id="4_dialogue"]
 [ext_resource type="Script" path="res://scripts/world_manager.gd" id="5_world"]
+[ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="6_npc_template"]
+[ext_resource type="PackedScene" path="res://scenes/patrol_point.tscn" id="7_patrol_point"]
 codex/plan-ai-system-modules-and-files-sdicvm
 
 main
@@ -83,6 +85,14 @@ script = ExtResource("5_world")
 npc_template_path = NodePath("../CharacterBody3D")
 player_path = NodePath("../Player")
 spawn_npc_count = 2
+npc_scene_template = ExtResource("6_npc_template")
+
+
+[node name="PatrolPointA" parent="." instance=ExtResource("7_patrol_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3)
+
+[node name="PatrolPointB" parent="." instance=ExtResource("7_patrol_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2058797888]
 transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 0, 0, 0)

@@ -246,6 +246,8 @@ func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
 	if dialogue_memory != null and dialogue_memory.has_method("recall"):
 		var remembered_name := str(dialogue_memory.call("recall", "player_name"))
+		var seen_name := _get_actor_name(target)
+		if remembered_name != "" and remembered_name == seen_name:
 codex/plan-ai-system-modules-and-files-sdicvm
 		var seen_name := _get_actor_name(target)
 		if remembered_name != "" and remembered_name == seen_name:
