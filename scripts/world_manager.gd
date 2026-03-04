@@ -18,8 +18,11 @@ var _player: Node3D
 func _ready() -> void:
 	randomize()
 	_player = get_node_or_null(player_path) as Node3D
+codex/plan-ai-system-modules-and-files-sdicvm
 	if _player == null:
 		push_warning("[WorldManager] Player not found at path: %s" % player_path)
+
+main
 	_register_existing_npc()
 	_spawn_npcs()
 	_init_relationships()
@@ -69,12 +72,18 @@ func _register_npc(npc: CharacterBody3D) -> void:
 	_apply_time_of_day_to_npc(npc)
 
 func _update_ai_state_cache() -> void:
+codex/plan-ai-system-modules-and-files-sdicvm
 	var alive_npcs: Array[CharacterBody3D] = []
 	for npc in npcs:
 		if is_instance_valid(npc):
 			alive_npcs.append(npc)
 			npc_ai_states[npc.name] = _safe_get_ai_state(npc)
 	npcs = alive_npcs
+
+	for npc in npcs:
+		if is_instance_valid(npc):
+			npc_ai_states[npc.name] = _safe_get_ai_state(npc)
+main
 
 func _log_npc_decisions() -> void:
 	for npc in npcs:
