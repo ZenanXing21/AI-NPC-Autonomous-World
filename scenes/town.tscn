@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8a5067wldmr5"]
 
-[ext_resource type="Script" path="res://scripts/npc_bt_controller.gd" id="1_gt07c"]
-[ext_resource type="Resource" path="res://assets/ai/npc_behavior_tree.tres" id="2_bt"]
+[ext_resource type="Script" path="res://scripts/npc_state_machine.gd" id="1_gt07c"]
+[ext_resource type="Script" path="res://scripts/npc_perception.gd" id="2_sense"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -14,6 +14,9 @@ size = Vector2(20, 20)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ms2es"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_perception"]
+radius = 6.0
+
 [node name="Game" type="Node3D" unique_id=1881319710]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=721475733]
@@ -24,7 +27,6 @@ mesh = SubResource("PlaneMesh_gt07c")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1797099388]
 script = ExtResource("1_gt07c")
-behavior_tree = ExtResource("2_bt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1687184594]
 mesh = SubResource("CapsuleMesh_f2a5t")
@@ -36,6 +38,24 @@ shape = SubResource("CapsuleShape3D_ms2es")
 path_desired_distance = 0.5
 target_desired_distance = 0.5
 max_speed = 3.0
+
+[node name="PerceptionArea" type="Area3D" parent="CharacterBody3D"]
+script = ExtResource("2_sense")
+monitoring = true
+monitorable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/PerceptionArea"]
+shape = SubResource("SphereShape3D_perception")
+
+
+[node name="Player" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_f2a5t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_ms2es")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=177350410]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 10, 15)
