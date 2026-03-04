@@ -1,6 +1,7 @@
 extends Node
 
 signal player_interacted(player_name: String, topic: String)
+signal llm_response_received(text: String)
 
 @export var interaction_range: float = 3.0
 @export var default_topics: PackedStringArray = ["town", "work", "rumors"]
@@ -13,12 +14,20 @@ var memory: Dictionary = {
 
 var _owner_npc: Node3D
 var _current_player: Node3D
+@onready var ai_llm: Node = $AILLM if has_node("AILLM") else null
+
+var _last_llm_output: String = ""
 
 func _ready() -> void:
 	_owner_npc = get_parent() as Node3D
 	if not player_interacted.is_connected(_on_player_interacted):
 		player_interacted.connect(_on_player_interacted)
 	print("[Dialogue] Ready. Press interact near NPC to talk.")
+	if ai_llm != null:
+		if ai_llm.has_signal("response_ready") and not ai_llm.is_connected("response_ready", Callable(self, "_on_llm_response_ready")):
+			ai_llm.connect("response_ready", Callable(self, "_on_llm_response_ready"))
+		if ai_llm.has_signal("request_failed") and not ai_llm.is_connected("request_failed", Callable(self, "_on_llm_request_failed")):
+			ai_llm.connect("request_failed", Callable(self, "_on_llm_request_failed"))
 
 func _process(_delta: float) -> void:
 	_current_player = _find_nearby_player()
@@ -51,6 +60,25 @@ func get_memory_status_text() -> String:
 	var topics: Array = memory.get("topics", [])
 	var count := int(memory.get("interaction_count", 0))
 	return "name=%s | interactions=%d | topics=%s" % [known_name, count, str(topics)]
+
+
+func request_llm_dialogue(player_text: String) -> void:
+	if ai_llm == null or not ai_llm.has_method("generate_dialogue"):
+		_on_llm_response_ready("[Fallback] No LLM module configured. You said: %s" % player_text)
+		return
+	var npc_name := _owner_npc.name if _owner_npc != null else "NPC"
+	ai_llm.call("generate_dialogue", player_text, memory, npc_name)
+
+func get_last_llm_output() -> String:
+	return _last_llm_output
+
+func _on_llm_response_ready(text: String) -> void:
+	_last_llm_output = text
+	emit_signal("llm_response_received", text)
+	print("[Dialogue LLM] " + text)
+
+func _on_llm_request_failed(error_message: String) -> void:
+	_on_llm_response_ready("[LLM Error] " + error_message)
 
 func _on_player_interacted(player_name: String, topic: String) -> void:
 	remember("player_name", player_name)

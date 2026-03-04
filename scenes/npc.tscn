@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/npc_state_machine.gd" id="1_fsm"]
 [ext_resource type="Script" path="res://scripts/npc_perception.gd" id="2_sense"]
 [ext_resource type="Script" path="res://scripts/npc_dialogue.gd" id="3_dialogue"]
+[ext_resource type="Script" path="res://scripts/ai_llm.gd" id="4_llm"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
 
@@ -28,6 +29,10 @@ max_speed = 3.0
 [node name="NPCDialogue" type="Node" parent="."]
 script = ExtResource("3_dialogue")
 interaction_range = 3.5
+
+[node name="AILLM" type="Node" parent="NPCDialogue"]
+script = ExtResource("4_llm")
+config_path = "res://config/llm_config.cfg"
 
 [node name="PerceptionArea" type="Area3D" parent="."]
 script = ExtResource("2_sense")

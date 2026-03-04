@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/patrol_point.tscn" id="7_patrol_point"]
 [ext_resource type="Script" path="res://scripts/npc_status_panel.gd" id="8_ui"]
 [ext_resource type="Script" path="res://scripts/debug_tools.gd" id="9_debug"]
+[ext_resource type="Script" path="res://scripts/ai_llm.gd" id="10_llm"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -50,6 +51,10 @@ max_speed = 3.0
 [node name="NPCDialogue" type="Node" parent="CharacterBody3D"]
 script = ExtResource("4_dialogue")
 interaction_range = 3.5
+
+[node name="AILLM" type="Node" parent="CharacterBody3D/NPCDialogue"]
+script = ExtResource("10_llm")
+config_path = "res://config/llm_config.cfg"
 
 [node name="PerceptionArea" type="Area3D" parent="CharacterBody3D"]
 script = ExtResource("3_sense")
@@ -103,7 +108,7 @@ target_npc_path = NodePath("../CharacterBody3D")
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 480.0
-offset_bottom = 182.0
+offset_bottom = 360.0
 
 [node name="MarginContainer" type="MarginContainer" parent="NPCStatusUI/PanelContainer"]
 
@@ -123,6 +128,18 @@ text = "Memory: N/A"
 
 [node name="TriggerDialogueButton" type="Button" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
 text = "Trigger Dialogue"
+
+[node name="LLMInput" type="LineEdit" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+placeholder_text = "Ask NPC with LLM..."
+
+[node name="AskLLMButton" type="Button" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+text = "Ask LLM"
+
+[node name="LLMOutput" type="RichTextLabel" parent="NPCStatusUI/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 90)
+fit_content = true
+scroll_active = true
+text = "LLM: (mock mode enabled by default)"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2058797888]
 transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 0, 0, 0)

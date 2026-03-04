@@ -257,6 +257,18 @@ func trigger_dialogue() -> void:
 		speaker = _get_actor_name(player)
 	dialogue_memory.call("trigger_dialogue", speaker)
 
+
+func request_llm_dialogue(player_text: String) -> void:
+	if dialogue_memory != null and dialogue_memory.has_method("request_llm_dialogue"):
+		dialogue_memory.call("request_llm_dialogue", player_text)
+	else:
+		push_warning("[FSM] Dialogue node missing request_llm_dialogue()")
+
+func get_last_llm_output() -> String:
+	if dialogue_memory != null and dialogue_memory.has_method("get_last_llm_output"):
+		return str(dialogue_memory.call("get_last_llm_output"))
+	return ""
+
 func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
 	if dialogue_memory != null and dialogue_memory.has_method("recall"):
