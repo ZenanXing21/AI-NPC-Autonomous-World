@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8a5067wldmr5"]
 
-[ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://npc_controller.gd" id="1_gt07c"]
+[ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://scripts/npc_state_machine.gd" id="1_gt07c"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
