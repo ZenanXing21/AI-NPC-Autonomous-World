@@ -50,3 +50,7 @@ interact={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/bt/plugin.cfg")
