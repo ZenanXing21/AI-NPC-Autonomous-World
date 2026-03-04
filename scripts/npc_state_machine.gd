@@ -26,6 +26,8 @@ var lost_player_timer: float = 0.0
 var patrol_target: Vector3
 var investigate_target: Vector3
 var player: Node3D
+var current_state_name: String = ""
+var schedule_mode: String = "day"
 
 class State:
 	extends RefCounted
@@ -43,7 +45,8 @@ class IdleState:
 		npc.move_and_slide()
 		print("[FSM] Enter IdleState")
 	func physics_update(npc, _delta: float) -> void:
-		npc.change_state("PatrolState")
+		if npc.schedule_mode != "night":
+			npc.change_state("PatrolState")
 
 class PatrolState:
 	extends State
@@ -133,6 +136,7 @@ func change_state(state_name: String) -> void:
 	if current_state != null:
 		current_state.exit(self)
 	current_state = next_state
+	current_state_name = state_name
 	current_state.enter(self)
 
 func can_sense_player() -> bool:
@@ -194,6 +198,39 @@ func move_along_path(_delta: float) -> void:
 	else:
 		velocity = direction.normalized() * move_speed
 	move_and_slide()
+
+
+func get_ai_state() -> String:
+	return current_state_name
+
+func set_schedule_mode(mode: String) -> void:
+	schedule_mode = mode
+	if schedule_mode == "night":
+		move_speed = 1.8
+		if current_state_name == "PatrolState":
+			change_state("IdleState")
+	else:
+		move_speed = 3.0
+		if current_state_name == "IdleState":
+			change_state("PatrolState")
+	print("[FSM] Schedule set to: ", schedule_mode)
+
+func on_world_event(event_name: String, payload: Dictionary) -> void:
+	if event_name == "player_enters_town":
+		var incoming_player := payload.get("player") as Node3D
+		if incoming_player != null:
+			player = incoming_player
+			print("[FSM] World event: player entered town -> ", player.name)
+
+func receive_gossip(from_npc_name: String, topic: String) -> void:
+	if dialogue_memory != null and dialogue_memory.has_method("recall") and dialogue_memory.has_method("remember"):
+		var topics: Array = dialogue_memory.call("recall", "topics")
+		if topics == null:
+			topics = []
+		if not topics.has(topic):
+			topics.append(topic)
+			dialogue_memory.call("remember", "topics", topics)
+	print("[FSM] Heard gossip from %s: %s" % [from_npc_name, topic])
 
 func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
