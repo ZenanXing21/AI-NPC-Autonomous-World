@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="BehaviorTree" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://addons/bt/runtime/behavior_tree.gd" id="1_bt"]
+[ext_resource type="Script" path="res://addons/bt/runtime/bt_selector.gd" id="2_sel"]
+[ext_resource type="Script" path="res://addons/bt/runtime/bt_sequence.gd" id="3_seq"]
+[ext_resource type="Script" path="res://scripts/bt_nodes/is_player_visible.gd" id="4_vis"]
+[ext_resource type="Script" path="res://scripts/bt_nodes/chase_task.gd" id="5_chase"]
+[ext_resource type="Script" path="res://scripts/bt_nodes/find_target_task.gd" id="6_find"]
+[ext_resource type="Script" path="res://scripts/bt_nodes/idle_task.gd" id="7_idle"]
+[ext_resource type="Script" path="res://scripts/bt_nodes/patrol_task.gd" id="8_patrol"]
+
+[sub_resource type="Resource" id="Res_IsVisible"]
+script = ExtResource("4_vis")
+
+[sub_resource type="Resource" id="Res_ChaseTask"]
+script = ExtResource("5_chase")
+
+[sub_resource type="Resource" id="Res_ChaseSequence"]
+script = ExtResource("3_seq")
+children = Array[Resource]([SubResource("Res_IsVisible"), SubResource("Res_ChaseTask")])
+
+[sub_resource type="Resource" id="Res_FindTarget"]
+script = ExtResource("6_find")
+
+[sub_resource type="Resource" id="Res_IdleTask"]
+script = ExtResource("7_idle")
+min_idle_seconds = 1.0
+max_idle_seconds = 4.0
+
+[sub_resource type="Resource" id="Res_PatrolTask"]
+script = ExtResource("8_patrol")
+
+[sub_resource type="Resource" id="Res_PatrolSequence"]
+script = ExtResource("3_seq")
+children = Array[Resource]([SubResource("Res_FindTarget"), SubResource("Res_IdleTask"), SubResource("Res_PatrolTask")])
+
+[sub_resource type="Resource" id="Res_RootSelector"]
+script = ExtResource("2_sel")
+children = Array[Resource]([SubResource("Res_ChaseSequence"), SubResource("Res_PatrolSequence")])
+
+[resource]
+script = ExtResource("1_bt")
+root = SubResource("Res_RootSelector")

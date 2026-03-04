@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c8a5067wldmr5"]
 
-[ext_resource type="Script" uid="uid://dnw8q1agnpshe" path="res://scripts/npc_state_machine.gd" id="1_gt07c"]
+[ext_resource type="Script" path="res://scripts/npc_bt_controller.gd" id="1_gt07c"]
+[ext_resource type="Resource" path="res://assets/ai/npc_behavior_tree.tres" id="2_bt"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vaf5k"]
 vertices = PackedVector3Array(-9.5, 0.5, -9.5, -9.5, 0.5, 9.5, 9.5, 0.5, 9.5, 9.5, 0.5, -9.5)
@@ -23,6 +24,7 @@ mesh = SubResource("PlaneMesh_gt07c")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1797099388]
 script = ExtResource("1_gt07c")
+behavior_tree = ExtResource("2_bt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1687184594]
 mesh = SubResource("CapsuleMesh_f2a5t")
