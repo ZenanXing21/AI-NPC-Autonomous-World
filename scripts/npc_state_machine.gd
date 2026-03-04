@@ -232,6 +232,7 @@ func receive_gossip(from_npc_name: String, topic: String) -> void:
 			dialogue_memory.call("remember", "topics", topics)
 	print("[FSM] Heard gossip from %s: %s" % [from_npc_name, topic])
 
+codex/plan-ai-system-modules-and-files-sdicvm
 func _get_actor_name(actor: Node3D) -> String:
 	if actor == null:
 		return ""
@@ -239,12 +240,20 @@ func _get_actor_name(actor: Node3D) -> String:
 		return str(actor.get_meta("player_name"))
 	return actor.name
 
+
+main
 func _on_target_seen(target: Node3D) -> void:
 	blackboard["current_target"] = target
 	if dialogue_memory != null and dialogue_memory.has_method("recall"):
 		var remembered_name := str(dialogue_memory.call("recall", "player_name"))
 		var seen_name := _get_actor_name(target)
 		if remembered_name != "" and remembered_name == seen_name:
+codex/plan-ai-system-modules-and-files-sdicvm
+		var seen_name := _get_actor_name(target)
+		if remembered_name != "" and remembered_name == seen_name:
+
+		if remembered_name != "" and remembered_name == target.name:
+main
 			print("[FSM] Recognized familiar player: ", remembered_name)
 	if current_state == states.get("PatrolState"):
 		investigate_target = target.global_position
